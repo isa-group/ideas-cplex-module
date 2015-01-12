@@ -1,0 +1,10 @@
+// Decision variables:
+Cost = intVar(0..500);
+InputErrors = intVar(0..100);
+
+// Constraints:
+InputErrors <= 1 && InputErrors > 1;
+
+parameters {
+  SearchType = DepthFirst;
+}

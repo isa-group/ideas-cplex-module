@@ -1,0 +1,30 @@
+		{
+				id: "iagree-cplex-cp-language",
+				extension: "cpo",
+				name: "CPO",
+				formats: [
+				 	{
+				 		format: "cpo",
+				 		editorModeId: "ace/mode/cp",
+				 		_editorModeURI: "mode-cp.js",
+				 		editorThemeId: "ace/theme/cp",
+				 		_editorThemeURI: "theme-cp.js",
+				 		checkLanguage: "false"
+				 	}
+				],
+				 
+				operations: [
+
+				             {
+				            	 id: "execute",
+				            	 name: "Execute",
+				            	 data: {},
+				            	 _remoteExecution: "true",
+				            	 action: "function(result) {console.log(result);}"
+				             }
+				             
+				             ],
+				             
+				inspectorLoader: "function(loader, format) {}"
+
+			}

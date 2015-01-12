@@ -1,0 +1,30 @@
+		{
+				id: "iagree-cplex-language",
+				extension: "lp",
+				name: "LP",
+				formats: [
+				 	{
+				 		format: "lp",
+				 		editorModeId: "ace/mode/lp",
+				 		_editorModeURI: "mode-lp.js",
+				 		editorThemeId: "ace/theme/lp",
+				 		_editorThemeURI: "theme-lp.js",
+				 		checkLanguage: "false"
+				 	}
+				],
+				 
+				operations: [
+
+				             {
+				            	 id: "execute",
+				            	 name: "Execute",
+				            	 data: {},
+				            	 _remoteExecution: "true",
+				            	 action: "function(result) {console.log(result);}"
+				             }
+				             
+				             ],
+				             
+				inspectorLoader: "function(loader, format) {}"
+
+			}
