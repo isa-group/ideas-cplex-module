@@ -10,7 +10,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<modules>
-		<module>languages/ideas-cplex-lp-language</module>
-		<module>languages/ideas-cplex-cp-language</module>
+		<module>languages/ideas-cplex-language</module>
 	</modules>
 </project>
