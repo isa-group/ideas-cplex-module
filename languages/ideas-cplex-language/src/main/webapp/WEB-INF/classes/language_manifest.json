@@ -1,15 +1,15 @@
 		{
 				id: "iagree-cplex-cp-language",
-				extension: "cpo",
-				name: "CPO",
+				extension: "opl",
+				name: "OPL",
 				formats: [
 				 	{
-				 		format: "cpo",
-				 		editorModeId: "ace/mode/cp",
-				 		_editorModeURI: "mode-cp.js",
-				 		editorThemeId: "ace/theme/cp",
-				 		_editorThemeURI: "theme-cp.js",
-				 		checkLanguage: "false"
+				 		format: "opl",
+				 		editorModeId: "ace/mode/opl",
+				 		_editorModeURI: "mode-opl.js",
+				 		editorThemeId: "ace/theme/opl",
+				 		_editorThemeURI: "theme-opl.js",
+				 		checkLanguage: "true"
 				 	}
 				],
 				 

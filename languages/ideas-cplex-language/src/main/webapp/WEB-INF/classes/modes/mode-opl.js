@@ -1,4 +1,4 @@
-ace.define('ace/mode/iAgree', ['require', 'exports', 'module' , 'ace/tokenizer', 'ace/mode/abap_highlight_rules', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/lib/oop'], function(require, exports, module) {
+ace.define('ace/mode/opl', ['require', 'exports', 'module' , 'ace/tokenizer', 'ace/mode/abap_highlight_rules', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/lib/oop'], function(require, exports, module) {
 
 var Tokenizer = require("../tokenizer").Tokenizer;
 var Rules = require("./sintaxis_highlight_rules").AbapHighlightRules;
@@ -54,46 +54,18 @@ var oop = require("../lib/oop");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
 var AbapHighlightRules = function() {
-
-    var keywordMapper = this.createKeywordMapper({
-        "token_Keyword.keyword": //keyword
-            "Template EndTemplate AgreementOffer EndAgreementOffer AgreementTerms CreationConstraints",
-        "variable.def": //def
-            "Initiator Responder ServiceProvider ExpirationTime MonitorableProperties Service description Global GuaranteeTerms Constraints Service Metrics",
-        "variable.def2": //def-2 
-            "GMTZone DateFormat GlobalPeriod DefinedPeriod EndDefinedPeriod guarantees GlobalDescription global",
-        "entity-name-tag.atom": //atom
-            "belongs for of as measuredBy relatedTo availableAt valueOf is IMPLIES EQUAL",
-        "entity-name-tag.atom2": //atom-2
-            "except from during on AND OR NOT" ,
-        "entity-name-tag.condition": //condition
-            "all exactly one or more" ,
-        "token_Keyword.actor": //actor
-            "Provider Consumer" ,
-        "entity-name-tag.attribute": //attribute
-            "onlyIf upon" , //[\w\$_]:
-        "entity-name-tag.type": //type
-            "integer string enum set boolean" ,
-        "entity-name-tag.true": //true
-            "true" ,
-        "entity-name-tag.flase": //false
-            "false",
-            
-    }, "text", false, " ");
-    
-    var keyword = "\\b(Template|EndTemplate|AgreementOffer|EndAgreementOffer|AgreementTerms|CreationConstraints)\\b";
-    var def = "\\b(Initiator|Responder|ServiceProvider|ExpirationTime|MonitorableProperties|Service|description|Global|GuaranteeTerms|Constraints|Service|Metrics)\\b";
-    var def2 = "\\b(GMTZone|DateFormat|GlobalPeriod|DefinedPeriod|EndDefinedPeriod|guarantees|GlobalDescription|global)\\b";
-    var atom = "\\b(belongs|for|of|as|measuredBy|relatedTo|availableAt|valueOf|is|IMPLIES|EQUAL)\\b";
-    var atom2 = "(\\b(except|from|during|on|AND|OR|NOT)\\b)";
-    var condition = "\\b(all|exactly|one|or|more)\\b";
-    var actor = "\\b(Provider|Consumer)\\b";
-    var attribute = "\\b(onlyIf|upon|[\w\$_]:)\\b";
-    var type = "\\b(integer|string|enum|set|boolean|float)\\b";
+	
+    var keyword = "\\b(CP|CPLEX|subject to|constraints|execute|main|include)\\b";
+    var def = "\\b(dvar|range|dexpr|setof|tuple)\\b";
+    var atom = "\\b(all|and|assert|cumulFunction|DBConnection|DBExecute|DBRead|DBUpdate|" +
+    		"diff|div|else|forall|from|in|if|infinity|intensity|inter|invoke|key|" +
+    		"max|maximize|maxint|min|minimize|mod|not in|optional|or|ordered|piecewise|" +
+    		"prepare|prod|pwlFunction|reversed|SheetConnection|SheetRead|SheetWrite|size|sorted|" +
+    		"SPSSConnection|SPSSRead|stateFunction|stepFunction|stepWise|sum|symdiff|to|types|" +
+    		"union|using|with)\\b";
+    var type = "\\b(boolean|float|float+|int|int+|interval|sequence|string)\\b";
     var True = "\\b(true)\\b";
     var False = "\\b(false)\\b";
-    var subtle = "\\b((|)|[|])\\b";
-    var otherVariables = "(\\b\\d+(\\.\\d+)?\\b)";
     var url = "((http://|https://|ftp://|www.|localhost/|localhost:)([^\\s])+)";
     
      
@@ -101,18 +73,13 @@ var AbapHighlightRules = function() {
         "start" : [
             {token : "token_Keyword.keyword", regex : keyword},
             {token : "variable.def", regex : def},
-            {token : "variable.def2", regex : def2},
             {token : "entity-name-tag.atom", regex : atom},
-            {token : "entity-name-tag.atom2", regex : atom2},
             {token : "string", regex : '"', next  : "pstring"},
 			{token : "string", regex : "'", next  : "qstring"},
-            {token : "entity-name-tag.condition", regex : condition},
-            {token : "token_Keyword.actor", regex : actor},
-            {token : "entity-name-tag.attribute", regex : attribute},
             {token : "entity-name-tag.type", regex : type},
             {token : "entity-name-tag.true", regex : True},
             {token : "entity-name-tag.false", regex : False},
-//            {token : keywordMapper, regex : "\\b\\w+\\b"},
+            {token : "comment",  regex : "//.*"},
             {caseInsensitive: false}
         ],
         "pstring" : [

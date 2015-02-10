@@ -1,0 +1,62 @@
+[
+	{
+		"id": "execute-cp-valid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resources/cp/valid.opl"
+		},
+		"results": [
+			{"status":"OK","message":"<pre>// solution\nImageTranslation = 1;\nTranslationTime = 3;\n</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resources/cp/valid.opl","annotations":null,"customStruct":null}
+		]
+	},
+	{
+		"id": "execute-cp-invalid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resources/cp/invalid.opl"
+		},
+		"results": [
+			{"status":"OK","message":"<pre>The document has conflicts\n</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resources/cp/invalid.opl","annotations":null,"customStruct":null}
+		]
+	},
+	{
+		"id": "execute-cplex-valid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resources/cplex/valid.opl"
+		},
+		"results": [
+			{"status":"OK","message":"<pre>// solution (optimal) with objective 0\n// Quality Incumbent solution:\n// MILP objective                                 0,0000000000e+00\n// MILP solution norm |x| (Total, Max)            5,00000e+00  3,00000e+00\n// MILP solution error (Ax=b) (Total, Max)        0,00000e+00  0,00000e+00\n// MILP x bound error (Total, Max)                0,00000e+00  0,00000e+00\n// MILP x integrality error (Total, Max)          0,00000e+00  0,00000e+00\n// MILP slack bound error (Total, Max)            0,00000e+00  0,00000e+00\n// MILP indicator slack bound error (Total, Max)  0,00000e+00  0,00000e+00\n// \n\nImageTranslation = 1;\nTranslationTime = 3;\n</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resources/cplex/valid.opl","annotations":null,"customStruct":null}
+		]
+	},
+	{
+		"id": "execute-cplex-invalid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resources/cplex/invalid.opl"
+		},
+		"results": [
+			{"status":"OK","message":"<pre>The document has conflicts\n\nConflict Refinement process finished: Printing Conflicts\n\tProved: IloIfThenI (12)\n  left IloIntVar(5)[0..1]  == 0 \n  right IloIntVar(11)[0..100]  <= 1 \n\n\tProved: IloIfThenI (15)\n  left IloIntVar(5)[0..1]  == 1 \n  right IloIntVar(11)[0..100]  <= 2 \n\n\tProved: 3 <= IloIntVar(11)[0..100]  \n\nConflict Summary:\n\tConstraint conflicts     = 0\n\tVariable Bound conflicts = 0\n\tSOS conflicts            = 0\n\nSuggested Bound changes:\n\tIloIfThenI (15)\n  left IloIntVar(5)[0..1]  == 1 \n  right IloIntVar(11)[0..100]  <= 2 \n ; Change = 1.0\n\nRelaxed Model's obj value = 1.0\nRelaxed Model's solution status:FeasibleRelaxedSum\nRelaxed Model's Variable: ImageTranslation; Value = 1.0\nRelaxed Model's Variable: TranslationTime; Value = 3.0</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resources/cplex/invalid.opl","annotations":null,"customStruct":null}
+		]
+	}
+]

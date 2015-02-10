@@ -1,0 +1,13 @@
+using CP;
+
+// Decision variables:
+dvar int ImageTranslation in 0..1;
+dvar int TranslationTime in 0..100;
+
+// Constraints:
+subject to {  
+	ct1: ImageTranslation == 0 => TranslationTime <= 1;
+	ct2: ImageTranslation == 1 => TranslationTime <= 3;
+	ct3: ImageTranslation == 1;
+	ct4: TranslationTime >= 3;
+}
