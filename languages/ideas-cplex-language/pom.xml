@@ -56,10 +56,10 @@
 			<id>ideas</id>
 			<url>http://clinker.isagroup.es/nexus/content/repositories/ideas</url>
 		</repository>
-		
+
 		<repository>
-		    <id>3rd-party</id>
-		    <url>http://clinker.isagroup.es/nexus/content/repositories/thirdparty</url>
+			<id>3rd-party</id>
+			<url>http://clinker.isagroup.es/nexus/content/repositories/thirdparty</url>
 		</repository>
 
 	</repositories>
@@ -72,33 +72,13 @@
 			<artifactId>ideas-core</artifactId>
 			<version>${ideas.version}</version>
 		</dependency>
-		
-		<!-- 
-		<dependency>
-			<groupId>es.us.isa</groupId>
-			<artifactId>iagree-analyser</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		 -->
-		 
-		<dependency>
-			<groupId>es.us.isa.ideas.module.language</groupId>
-			<artifactId>iagree-common</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
-		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-		</dependency>		
-		
-		<dependency>
-			<groupId>com.ibm.cplex</groupId>
-			<artifactId>OPL</artifactId>
-			<version>12.5.1</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<!-- BUILD CONFIGURATION -->

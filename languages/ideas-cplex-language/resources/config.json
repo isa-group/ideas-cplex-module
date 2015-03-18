@@ -1,0 +1,6 @@
+{
+    "defaultInputFormat": "IAGREE",
+    "CSPReasoner": "CSPWebReasoner",
+    "CSPWebReasonerEndpoint": "https://labs.isa.us.es:8181/CSPWebReasoner",
+    "DLReasoner": "none"
+}
