@@ -7,11 +7,9 @@
 		<groupId>es.us.isa.ideas.module</groupId>
 		<artifactId>IDEAS-cplex-module</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>./../../pom.xml</relativePath>
 	</parent>
 	<groupId>es.us.isa.ideas.module.language</groupId>
 	<artifactId>ideas-cplex-language</artifactId>
-	<!-- <version>0.0.1-SNAPSHOT</version> -->
 	<packaging>war</packaging>
 
 	<name>ideas-cplex-language</name>
@@ -21,7 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!--- VERSIONING -->
-		<java.version>1.6</java.version>
+		<java.version>1.8</java.version>
 		<ideas.version>0.0.1-SNAPSHOT</ideas.version>
 	</properties>
 	<!-- Repositories to download components and plugins -->
@@ -57,11 +55,6 @@
 			<url>http://clinker.isagroup.es/nexus/content/repositories/ideas</url>
 		</repository>
 
-		<repository>
-			<id>3rd-party</id>
-			<url>http://clinker.isagroup.es/nexus/content/repositories/thirdparty</url>
-		</repository>
-
 	</repositories>
 
 	<dependencies>
@@ -80,28 +73,4 @@
 		</dependency>
 
 	</dependencies>
-
-	<!-- BUILD CONFIGURATION -->
-	<build>
-
-		<plugins>
-			<!-- Maven Eclipse Plugin -->
-			<plugin>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<wtpversion>2.5</wtpversion>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
 </project>

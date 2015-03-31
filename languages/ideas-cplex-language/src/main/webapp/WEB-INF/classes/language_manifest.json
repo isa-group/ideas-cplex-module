@@ -1,5 +1,5 @@
 		{
-				id: "iagree-cplex-cp-language",
+				id: "cplex-language",
 				extension: "opl",
 				name: "OPL",
 				formats: [

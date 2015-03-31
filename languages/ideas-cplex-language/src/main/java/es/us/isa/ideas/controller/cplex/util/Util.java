@@ -30,8 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
-import com.google.gson.Gson;
-
 /**
  * @author jdelafuente
  *
@@ -39,10 +37,7 @@ import com.google.gson.Gson;
 public class Util {
 
 	// HTTP POST request
-	public static OperationResponse sendPost(String url, String content)
-			throws Exception {
-
-		Gson gson = new Gson();
+	public static String sendPost(String url, String content) throws Exception {
 
 		URL obj = new URL(url);
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
@@ -50,7 +45,7 @@ public class Util {
 		// add reuqest header
 		con.setRequestMethod("POST");
 
-		String param = "opl=" + URLEncoder.encode(content, "UTF-8");
+		String param = "content=" + URLEncoder.encode(content, "UTF-8");
 
 		// Send post request
 		con.setDoOutput(true);
@@ -58,24 +53,24 @@ public class Util {
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 			wr.writeBytes(param);
 			wr.flush();
-		} catch(Exception e){
-			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		StringBuilder response = null;
 		try {// int responseCode = con.getResponseCode();
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
 			String inputLine;
 			response = new StringBuilder();
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
-		} catch(Exception e){
-			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		return gson.fromJson(response.toString(), OperationResponse.class);
+		return response.toString();
 	}
 
 	private static final Logger LOG = Logger.getLogger(Util.class.getName());
@@ -161,33 +156,33 @@ public class Util {
 	}
 
 	public static String DOM2String(Document doc) {
-        String xmlString = null;
-        try {
-            Transformer transformer = TransformerFactory.newInstance()
-                    .newTransformer();
+		String xmlString = null;
+		try {
+			Transformer transformer = TransformerFactory.newInstance()
+					.newTransformer();
 
-            // set some options on the transformer
-            transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-                    "yes");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(
-                    "{http://xml.apache.org/xslt}indent-amount", "2");
+			// set some options on the transformer
+			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+					"yes");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(
+					"{http://xml.apache.org/xslt}indent-amount", "2");
 
-            // initialize StreamResult with File object to save to file
-            StreamResult result = new StreamResult(new StringWriter());
-            DOMSource source = new DOMSource(doc);
-            transformer.transform(source, result);
+			// initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(new StringWriter());
+			DOMSource source = new DOMSource(doc);
+			transformer.transform(source, result);
 
-            xmlString = result.getWriter().toString();
-        } catch (TransformerConfigurationException e) {
-            Util.LOG.log(Level.WARNING, "DOM2String error", e);
-        } catch (TransformerException e) {
-        	Util.LOG.log(Level.WARNING, "DOM2String error", e);
+			xmlString = result.getWriter().toString();
+		} catch (TransformerConfigurationException e) {
+			Util.LOG.log(Level.WARNING, "DOM2String error", e);
+		} catch (TransformerException e) {
+			Util.LOG.log(Level.WARNING, "DOM2String error", e);
 		}
 
-        return xmlString;
-    }
+		return xmlString;
+	}
 
 	public static String getTimestamp() {
 		String timestamp;

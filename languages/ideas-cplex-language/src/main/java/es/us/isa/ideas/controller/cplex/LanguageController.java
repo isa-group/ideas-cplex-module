@@ -2,12 +2,19 @@ package es.us.isa.ideas.controller.cplex;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
+import es.us.isa.ideas.common.AppAnnotations;
 import es.us.isa.ideas.common.AppResponse;
 import es.us.isa.ideas.common.AppResponse.Status;
 import es.us.isa.ideas.controller.cplex.util.Config;
@@ -25,44 +32,61 @@ public class LanguageController extends BaseLanguageController {
 			String fileUri) {
 
 		AppResponse appResponse = new AppResponse();
-		
+
 		InputStream in = LanguageController.class
 				.getResourceAsStream("/config.json");
 		String config = Util.getStringFromInputStream(in);
-		
+
 		try {
 			Config.loadConfig(config);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		if (id.equals("execute")) {						
+		if (id.equals("execute")) {
 			String url = Config.getProperty("CSPWebReasonerEndpoint");
-	        url += "/solve";
+			url += "/solver/solve";
 
-	        OperationResponse op = new OperationResponse();
-	        try {
-	        	op = Util.sendPost(url, content);
-	        	
-	        	if((Boolean) op.get("consistent")){
+			try {
+				String json = Util.sendPost(url, content);
+				Boolean solve = new Gson().fromJson(json.toString(), Boolean.class);
+
+				url = Config.getProperty("CSPWebReasonerEndpoint");
+				url += "/solver/explain";
+				
+				json = Util.sendPost(url, content);
+				OperationResponse op = new Gson().fromJson(json.toString(), OperationResponse.class);
+				
+				if (solve) {
 					appResponse.setMessage("<pre>The document is consistent.\n"
 							+ op.get("result") + "</pre>");
 					appResponse.setStatus(Status.OK_PROBLEMS);
 				} else {
-					appResponse.setMessage("<pre>The document has conflicts.\n"
-							+ op.get("conflicts") + "</pre>");
-					appResponse.setStatus(Status.OK_PROBLEMS);
-				}	
-	        	
-	        } catch (Exception e) {
-	        	appResponse.setMessage("<pre>There was a problem processing your request</pre>");
+					if((Boolean) op.getResult().get("existInconsistencies")){
+						appResponse.setMessage("<pre>The document is not consistent.\n"
+								+ op.getResult().get("conflicts") + "</pre>");
+						appResponse.setStatus(Status.OK_PROBLEMS);
+					} else if((Boolean) op.getResult().get("existDeadTerms")){
+						appResponse.setMessage("<pre>The document has dead terms.\n"
+								+ op.getResult().get("conflicts_deadterms") + "</pre>");
+						appResponse.setStatus(Status.OK_PROBLEMS);
+					} else if((Boolean) op.getResult().get("existCondInconsTerms")){
+						appResponse.setMessage("<pre>The document has conditionally inconsistent terms.\n"
+								+ op.getResult().get("conflicts_condIncons") + "</pre>");
+						appResponse.setStatus(Status.OK_PROBLEMS);
+					}
+				}
+
+			} catch (Exception e) {
+				appResponse
+						.setMessage("<pre>There was a problem processing your request</pre>");
 				appResponse.setStatus(Status.OK_PROBLEMS);
 				e.printStackTrace();
-	        }					
+			}
 		}
 
 		appResponse.setFileUri(fileUri);
-		
+
 		return appResponse;
 	}
 
@@ -70,57 +94,42 @@ public class LanguageController extends BaseLanguageController {
 	@ResponseBody
 	public AppResponse checkLanguage(String id, String content, String fileUri) {
 
+		InputStream in = LanguageController.class
+				.getResourceAsStream("/config.json");
+		String config = Util.getStringFromInputStream(in);
+
+		try {
+			Config.loadConfig(config);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		AppResponse appResponse = new AppResponse();
-		
-//		CustomErrorHandler errorHandler = null;
-//		
-//		try {
-//			String[] aux = fileUri.split("/");
-//			String filename = aux[aux.length-1]; 
-//			
-//			File temp = File.createTempFile(filename.replace(".opl", ""), ".opl");
-//
-//			// write it
-//			BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
-//			bw.write(content);
-//			bw.close();
-//
-//			IloEnv env = new IloEnv();
-//			IloOplFactory oplF = new IloOplFactory();
-//			errorHandler = new CustomErrorHandler(oplF);
-//			
-//			IloOplModelSource modelSource = oplF.createOplModelSource(temp.getAbsolutePath());
-//			
-//			IloOplSettings settings = new IloOplSettings(env, errorHandler);
-//			IloOplModelDefinition def = oplF.createOplModelDefinition(
-//					modelSource, settings);
-//
-//			String using = content.substring(0, content.indexOf("\n"))
-//					.trim();
-//			Boolean useCP = using.equals("using CP;") ? true : false;
-//
-//			if (useCP) {
-//				IloCP cp = oplF.createCP();
-//				cp.setOut(null);
-//				IloOplModel opl = oplF.createOplModel(def, cp);
-//				opl.generate();
-//			} else {
-//				IloCplex clex = oplF.createCplex();
-//				clex.setOut(null);
-//				IloOplModel opl = oplF.createOplModel(def, clex);
-//				opl.generate();
-//			}
-//		} catch(Exception e){
-//			appResponse.setStatus(Status.OK_PROBLEMS);
-//		}
-//		
-//		appResponse.setAnnotations(errorHandler.getAnnotations().toArray(new AppAnnotations[0]));
-//		
-//		if(errorHandler.getAnnotations().size() == 0)
-//			appResponse.setStatus(Status.OK);
-//		else
-//			appResponse.setStatus(Status.OK_PROBLEMS);
-		
+		List<AppAnnotations> annotations = new ArrayList<AppAnnotations>();
+
+		String url = Config.getProperty("CSPWebReasonerEndpoint");
+		url += "/language/check";
+
+		String json;
+		try {
+			json = Util.sendPost(url, content);
+
+			Type listType = new TypeToken<ArrayList<AppAnnotations>>() {
+			}.getType();
+			annotations = new Gson().fromJson(json.toString(), listType);
+
+			appResponse.setAnnotations(annotations
+					.toArray(new AppAnnotations[0]));
+		} catch (Exception e) {
+			e.printStackTrace();
+			appResponse.setStatus(Status.OK_PROBLEMS);
+		}
+
+		if (annotations.size() == 0)
+			appResponse.setStatus(Status.OK);
+		else
+			appResponse.setStatus(Status.OK_PROBLEMS);
+
 		return appResponse;
 	}
 
