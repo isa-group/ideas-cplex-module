@@ -2,5 +2,6 @@
     "defaultInputFormat": "OPL",
     "CSPReasoner": "CSPWebReasoner",
     "CSPWebReasonerEndpoint": "https://labs.isa.us.es:8181/CSPWebReasoner",
-    "DLReasoner": "none"
+    "DLReasoner": "none",
+    "ANDConstraintsBreaking" : "true"
 }

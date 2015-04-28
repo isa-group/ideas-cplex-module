@@ -54,6 +54,11 @@
 			<id>ideas</id>
 			<url>http://clinker.isagroup.es/nexus/content/repositories/ideas</url>
 		</repository>
+		
+		<repository>
+			<id>AML</id>
+			<url>http://clinker.isagroup.es/nexus/content/repositories/AML</url>
+		</repository>
 
 	</repositories>
 
@@ -64,6 +69,12 @@
 			<groupId>es.us.isa.ideas</groupId>
 			<artifactId>ideas-core</artifactId>
 			<version>${ideas.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>es.us.isa</groupId>
+			<artifactId>AML</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 
 		<dependency>

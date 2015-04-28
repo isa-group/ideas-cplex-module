@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import es.us.isa.aml.util.Config;
+import es.us.isa.aml.util.OperationResponse;
 import es.us.isa.ideas.common.AppAnnotations;
 import es.us.isa.ideas.common.AppResponse;
 import es.us.isa.ideas.common.AppResponse.Status;
-import es.us.isa.ideas.controller.cplex.util.Config;
-import es.us.isa.ideas.controller.cplex.util.OperationResponse;
 import es.us.isa.ideas.controller.cplex.util.Util;
 import es.us.isa.ideas.module.controller.BaseLanguageController;
 
@@ -49,39 +49,38 @@ public class LanguageController extends BaseLanguageController {
 
 			try {
 				String json = Util.sendPost(url, content);
-				Boolean solve = new Gson().fromJson(json.toString(), Boolean.class);
+				Boolean solve = new Gson().fromJson(json.toString(),
+						Boolean.class);
 
 				url = Config.getProperty("CSPWebReasonerEndpoint");
 				url += "/solver/explain";
-				
+
 				json = Util.sendPost(url, content);
-				OperationResponse op = new Gson().fromJson(json.toString(), OperationResponse.class);
-				
+				OperationResponse op = new Gson().fromJson(json.toString(),
+						OperationResponse.class);
+
 				if (solve) {
 					appResponse.setMessage("<pre>The document is consistent.\n"
 							+ op.get("result") + "</pre>");
-					appResponse.setStatus(Status.OK_PROBLEMS);
+					appResponse.setStatus(Status.OK);
 				} else {
-					if((Boolean) op.getResult().get("existInconsistencies")){
+					if (op.getResult().get("conflicts") != null) {
+						appResponse
+								.setMessage("<pre>The document is not consistent.\n"
+										+ op.getResult().get("conflicts")
+										+ "</pre>");
+						appResponse.setStatus(Status.OK_PROBLEMS);
+					} else {
 						appResponse.setMessage("<pre>The document is not consistent.\n"
-								+ op.getResult().get("conflicts") + "</pre>");
-						appResponse.setStatus(Status.OK_PROBLEMS);
-					} else if((Boolean) op.getResult().get("existDeadTerms")){
-						appResponse.setMessage("<pre>The document has dead terms.\n"
-								+ op.getResult().get("conflicts_deadterms") + "</pre>");
-						appResponse.setStatus(Status.OK_PROBLEMS);
-					} else if((Boolean) op.getResult().get("existCondInconsTerms")){
-						appResponse.setMessage("<pre>The document has conditionally inconsistent terms.\n"
-								+ op.getResult().get("conflicts_condIncons") + "</pre>");
+								+ op.get("result") + "</pre>");
 						appResponse.setStatus(Status.OK_PROBLEMS);
 					}
 				}
 
 			} catch (Exception e) {
 				appResponse
-						.setMessage("<pre>There was a problem processing your request</pre>");
+						.setMessage("<pre>There was a problem processing your request.</pre>");
 				appResponse.setStatus(Status.OK_PROBLEMS);
-				e.printStackTrace();
 			}
 		}
 
@@ -103,7 +102,7 @@ public class LanguageController extends BaseLanguageController {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		AppResponse appResponse = new AppResponse();
 		List<AppAnnotations> annotations = new ArrayList<AppAnnotations>();
 
@@ -121,7 +120,6 @@ public class LanguageController extends BaseLanguageController {
 			appResponse.setAnnotations(annotations
 					.toArray(new AppAnnotations[0]));
 		} catch (Exception e) {
-			e.printStackTrace();
 			appResponse.setStatus(Status.OK_PROBLEMS);
 		}
 
