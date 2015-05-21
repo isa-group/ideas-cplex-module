@@ -60,18 +60,18 @@ public class LanguageController extends BaseLanguageController {
 						OperationResponse.class);
 
 				if (solve) {
-					appResponse.setMessage("<pre>The document is consistent.\n"
+					appResponse.setMessage("<pre><b>The document is consistent.</b>\n"
 							+ op.get("result") + "</pre>");
 					appResponse.setStatus(Status.OK);
 				} else {
 					if (op.getResult().get("conflicts") != null) {
 						appResponse
-								.setMessage("<pre>The document is not consistent.\n"
+								.setMessage("<pre><b>The document is not consistent.</b>\n"
 										+ op.getResult().get("conflicts")
 										+ "</pre>");
 						appResponse.setStatus(Status.OK_PROBLEMS);
 					} else {
-						appResponse.setMessage("<pre>The document is not consistent.\n"
+						appResponse.setMessage("<pre><b>The document is not consistent.</b>\n"
 								+ op.get("result") + "</pre>");
 						appResponse.setStatus(Status.OK_PROBLEMS);
 					}

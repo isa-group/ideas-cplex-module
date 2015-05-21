@@ -40,12 +40,26 @@ public class Util {
 	public static String sendPost(String url, String content) throws Exception {
 
 		URL obj = new URL(url);
+
+		javax.net.ssl.HttpsURLConnection
+				.setDefaultHostnameVerifier(new javax.net.ssl.HostnameVerifier() {
+
+					public boolean verify(String hostname,
+							javax.net.ssl.SSLSession sslSession) {
+						if (hostname.equals("localhost")) {
+							return true;
+						}
+						return false;
+					}
+				});
+
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
 		// add reuqest header
 		con.setRequestMethod("POST");
 
-		String param = "content=" + URLEncoder.encode(content, "UTF-8");
+		String param = "content="
+				+ URLEncoder.encode(content.replaceAll("\\+", "%2B"), "UTF-8");
 
 		// Send post request
 		con.setDoOutput(true);
@@ -60,7 +74,7 @@ public class Util {
 		StringBuilder response = null;
 		try {// int responseCode = con.getResponseCode();
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
+					con.getInputStream()), 2097152);
 			String inputLine;
 			response = new StringBuilder();
 			while ((inputLine = in.readLine()) != null) {
