@@ -9,7 +9,7 @@
 				 		_editorModeURI: "mode-opl.js",
 				 		editorThemeId: "ace/theme/opl",
 				 		_editorThemeURI: "theme-opl.js",
-				 		checkLanguage: "true"
+				 		checkLanguage: "false"
 				 	}
 				],
 				 
