@@ -1,6 +1,7 @@
 {
     "defaultInputFormat": "OPL",
     "CSPReasoner": "CSPWebReasoner",
+    "CSPWebReasonerEndpoint": "http://localhost:8080/CSPWebReasoner",
     "DLReasoner": "none",
     "ANDConstraintsBreaking" : "true"
 }

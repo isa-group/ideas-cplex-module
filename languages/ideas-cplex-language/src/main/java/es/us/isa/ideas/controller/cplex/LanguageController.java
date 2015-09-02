@@ -17,6 +17,8 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import es.us.isa.aml.reasoners.CSPWebReasoner;
+import es.us.isa.aml.reasoners.CplexHandler;
+import es.us.isa.aml.reasoners.CplexReasoner;
 import es.us.isa.aml.reasoners.Reasoner;
 import es.us.isa.aml.util.Config;
 import es.us.isa.aml.util.OperationResponse;
@@ -36,10 +38,6 @@ public class LanguageController extends BaseLanguageController {
 
 	@PostConstruct
 	public void init() {
-
-		System.out.println("config anterior: "
-				+ Config.getInstance().getPropertiesMap());
-
 		InputStream in = LanguageController.class
 				.getResourceAsStream(CONFIG_PATH);
 		String config = Util.getStringFromInputStream(in);
@@ -49,9 +47,6 @@ public class LanguageController extends BaseLanguageController {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
-		System.out.println("config posterior: "
-				+ Config.getInstance().getPropertiesMap());
 	}
 
 	@RequestMapping(value = "/operation/{id}/execute", method = RequestMethod.POST)
@@ -65,73 +60,49 @@ public class LanguageController extends BaseLanguageController {
 			if (id.equals("execute")) {
 
 				Reasoner reasoner = ReasonerFactory.createCSPReasoner();
+				Boolean solve = null;
+				OperationResponse op = null;
 
 				if (reasoner instanceof CSPWebReasoner) {
 					CSPWebReasoner webReasoner = (CSPWebReasoner) reasoner;
-					Boolean solve = webReasoner.solve(content);
-					OperationResponse op = webReasoner.explain(content);
-
-					if (solve) {
-						appResponse
-								.setMessage("<pre><b>The document is consistent.</b>\n"
-										+ op.get("result") + "</pre>");
-						appResponse.setStatus(Status.OK);
-					} else {
-						if (op.getResult().get("conflicts") != null) {
-							appResponse
-									.setMessage("<pre><b>The document is not consistent.</b>\n"
-											+ op.getResult().get("conflicts")
-											+ "</pre>");
-							appResponse.setStatus(Status.OK_PROBLEMS);
-						} else {
-							appResponse
-									.setMessage("<pre><b>The document is not consistent.</b>\n"
-											+ op.get("result") + "</pre>");
-							appResponse.setStatus(Status.OK_PROBLEMS);
-						}
-					}
-				} else {
-
-					String url = Config.getProperty("CSPWebReasonerEndpoint");
-					url += "/solver/solve";
-
+					solve = webReasoner.solve(content);
+					op = webReasoner.explain(content);
+				} else if (reasoner instanceof CplexReasoner) {
+					CplexHandler handler = new CplexHandler();
+					handler.init();
 					try {
-						String json = Util.sendPost(url, content);
-						Boolean solve = new Gson().fromJson(json.toString(),
+						String json = handler.solve(content);
+						solve = new Gson().fromJson(json.toString(),
 								Boolean.class);
-
-						url = Config.getProperty("CSPWebReasonerEndpoint");
-						url += "/solver/explain";
-
-						json = Util.sendPost(url, content);
-						OperationResponse op = new Gson().fromJson(
-								json.toString(), OperationResponse.class);
-
-						if (solve) {
-							appResponse
-									.setMessage("<pre><b>The document is consistent.</b>\n"
-											+ op.get("result") + "</pre>");
-							appResponse.setStatus(Status.OK);
-						} else {
-							if (op.getResult().get("conflicts") != null) {
-								appResponse
-										.setMessage("<pre><b>The document is not consistent.</b>\n"
-												+ op.getResult().get(
-														"conflicts") + "</pre>");
-								appResponse.setStatus(Status.OK_PROBLEMS);
-							} else {
-								appResponse
-										.setMessage("<pre><b>The document is not consistent.</b>\n"
-												+ op.get("result") + "</pre>");
-								appResponse.setStatus(Status.OK_PROBLEMS);
-							}
-						}
+						json = handler.explain(content);
+						op = new Gson().fromJson(json.toString(),
+								OperationResponse.class);
 					} catch (Exception e) {
 						appResponse
 								.setMessage("<pre>There was a problem processing your request.</pre>");
 						appResponse.setStatus(Status.OK_PROBLEMS);
 					}
 
+				}
+
+				if (solve) {
+					appResponse
+							.setMessage("<pre><b>The document is consistent.</b>\n"
+									+ op.get("result") + "</pre>");
+					appResponse.setStatus(Status.OK);
+				} else {
+					if (op.getResult().get("conflicts") != null) {
+						appResponse
+								.setMessage("<pre><b>The document is not consistent.</b>\n"
+										+ op.getResult().get("conflicts")
+										+ "</pre>");
+						appResponse.setStatus(Status.OK_PROBLEMS);
+					} else {
+						appResponse
+								.setMessage("<pre><b>The document is not consistent.</b>\n"
+										+ op.get("result") + "</pre>");
+						appResponse.setStatus(Status.OK_PROBLEMS);
+					}
 				}
 			}
 		} else {

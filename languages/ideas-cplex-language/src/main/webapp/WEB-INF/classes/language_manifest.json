@@ -20,7 +20,7 @@
 				            	 name: "Execute",
 				            	 data: {},
 				            	 _remoteExecution: "true",
-				            	 action: "function(result) {console.log(result);}"
+				            	 action: "function(operation, fileUri, result) {console.log(result);}"
 				             }
 				             
 				             ],
