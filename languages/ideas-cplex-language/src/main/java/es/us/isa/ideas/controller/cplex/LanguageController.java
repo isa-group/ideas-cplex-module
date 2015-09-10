@@ -1,6 +1,5 @@
 package es.us.isa.ideas.controller.cplex;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,12 +40,7 @@ public class LanguageController extends BaseLanguageController {
 		InputStream in = LanguageController.class
 				.getResourceAsStream(CONFIG_PATH);
 		String config = Util.getStringFromInputStream(in);
-
-		try {
-			Config.loadConfig(config);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		Config.load(config);
 	}
 
 	@RequestMapping(value = "/operation/{id}/execute", method = RequestMethod.POST)
@@ -123,7 +117,7 @@ public class LanguageController extends BaseLanguageController {
 		AppResponse appResponse = new AppResponse();
 		List<AppAnnotations> annotations = new ArrayList<AppAnnotations>();
 
-		String url = Config.getProperty("CSPWebReasonerEndpoint");
+		String url = Config.getInstance().getCSPWebReasonerEndpoint();
 		url += "/language/check";
 
 		String json;
