@@ -1,0 +1,62 @@
+[
+	{
+		"id": "execute-cp-valid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resource/opl/cp_valid"
+		},
+		"results": [
+			{"status":"OK","message":"<pre><b>The document is consistent.</b>\n// solution\nImageTranslation = 1;\nTranslationTime = 3;\n</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resource/opl/cp_valid","annotations":null,"customStruct":null}
+		]
+	},
+	{
+		"id": "execute-cp-invalid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resource/opl/cp_invalid"
+		},
+		"results": [
+			{"status":"OK_PROBLEMS","message":"<pre><b>The document is not consistent.</b>\n[ct1, ct2, ct4]</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resource/opl/cp_invalid","annotations":null,"customStruct":null}
+		]
+	},
+	{
+		"id": "execute-cplex-valid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resource/opl/cplex_valid"
+		},
+		"results": [
+			{"status":"OK","message":"<pre><b>The document is consistent.</b>\n// solution (optimal) with objective 0\n// Quality Incumbent solution:\n// MILP objective                                0.0000000000e+000\n// MILP solution norm |x| (Total, Max)           5.00000e+000 3.00000e+000\n// MILP solution error (Ax=b) (Total, Max)       0.00000e+000 0.00000e+000\n// MILP x bound error (Total, Max)               0.00000e+000 0.00000e+000\n// MILP x integrality error (Total, Max)         0.00000e+000 0.00000e+000\n// MILP slack bound error (Total, Max)           0.00000e+000 0.00000e+000\n// MILP indicator slack bound error (Total, Max) 0.00000e+000 0.00000e+000\n// \n\nImageTranslation = 1;\nTranslationTime = 3;\n</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resource/opl/cplex_valid","annotations":null,"customStruct":null}
+		]
+	},
+	{
+		"id": "execute-cplex-invalid",
+		"description": "Run the model",
+		"opUri": "/language/operation/execute/execute",
+		"opMethod": "POST",
+		"parameters": 
+		{
+			"id": "execute",
+			"content": "",
+			"fileUri": "/tests/resource/opl/cplex_invalid"
+		},
+		"results": [
+			{"status":"OK_PROBLEMS","message":"<pre><b>The document is not consistent.</b>\n[ct1, ct2, ct4]</pre>","htmlMessage":null,"data":null,"context":null,"fileUri":"/tests/resource/opl/cplex_invalid","annotations":null,"customStruct":null}
+		]
+	}
+]

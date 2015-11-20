@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import es.us.isa.aml.reasoners.CSPWebReasoner;
 import es.us.isa.aml.reasoners.CplexHandler;
@@ -23,9 +23,9 @@ import es.us.isa.aml.util.Config;
 import es.us.isa.aml.util.OperationResponse;
 import es.us.isa.aml.util.ReasonerFactory;
 import es.us.isa.aml.util.Util;
-import es.us.isa.ideas.common.AppAnnotations;
-import es.us.isa.ideas.common.AppResponse;
-import es.us.isa.ideas.common.AppResponse.Status;
+import es.us.isa.ideas.module.common.AppAnnotations;
+import es.us.isa.ideas.module.common.AppResponse;
+import es.us.isa.ideas.module.common.AppResponse.Status;
 import es.us.isa.ideas.module.controller.BaseLanguageController;
 
 @Controller
@@ -46,7 +46,7 @@ public class LanguageController extends BaseLanguageController {
 	@RequestMapping(value = "/operation/{id}/execute", method = RequestMethod.POST)
 	@ResponseBody
 	public AppResponse executeOperation(String id, String content,
-			String fileUri) {
+			String fileUri, String data) {
 
 		AppResponse appResponse = new AppResponse();
 
@@ -125,7 +125,6 @@ public class LanguageController extends BaseLanguageController {
 			json = Util.sendPost(url, content);
 
 			Type listType = new TypeToken<ArrayList<AppAnnotations>>() {
-				private static final long serialVersionUID = 1L;
 			}.getType();
 			annotations = new Gson().fromJson(json.toString(), listType);
 
