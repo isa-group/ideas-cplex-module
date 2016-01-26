@@ -1,30 +1,27 @@
-		{
-				id: "cplex-language",
-				extension: "opl",
-				name: "OPL",
-				formats: [
-				 	{
-				 		format: "opl",
-				 		editorModeId: "ace/mode/opl",
-				 		_editorModeURI: "mode-opl.js",
-				 		editorThemeId: "ace/theme/opl",
-				 		_editorThemeURI: "theme-opl.js",
-				 		checkLanguage: "false"
-				 	}
-				],
-				 
-				operations: [
+{
+    "id": "ideas-opl-language",
+    "extension": "opl",
+    "name": "OPL",
+    "formats": [
+        {
+            "format": "opl",
+            "editorModeId": "ace/mode/opl",
+            "_editorModeURI": "mode-opl.js",
+            "editorThemeId": "ace/theme/opl",
+            "_editorThemeURI": "theme-opl.js",
+            "checkLanguage": "false"
+        }
+    ],
+    "operations": [
+        {
+            "id": "execute",
+            "name": "Execute",
+            "data": {},
+            "_remoteExecution": "true",
+            "action": "function(operation, fileUri, result) {console.log(result);}"
+        }
 
-				             {
-				            	 id: "execute",
-				            	 name: "Execute",
-				            	 data: {},
-				            	 _remoteExecution: "true",
-				            	 action: "function(operation, fileUri, result) {console.log(result);}"
-				             }
-				             
-				             ],
-				             
-				inspectorLoader: "function(loader, format) {}"
+    ],
+    "inspectorLoader": "function(loader, format) {}"
 
-			}
+}
