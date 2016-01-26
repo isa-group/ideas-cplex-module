@@ -3,9 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.us.isa.ideas.module</groupId>
 	<artifactId>ideas-cplex-module</artifactId>
-	<version>0.7</version>
+	<version>0.8</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>languages/ideas-opl-language</module>
 	</modules>
+    <name>ideas-cplex-module</name>
 </project>
