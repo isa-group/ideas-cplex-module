@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import es.us.isa.aml.reasoners.CSPWebReasoner;
 import es.us.isa.aml.reasoners.Reasoner;
 import es.us.isa.aml.util.Config;
 import es.us.isa.aml.util.OperationResponse;
 import es.us.isa.aml.util.ReasonerFactory;
 import es.us.isa.aml.util.Util;
+
 import es.us.isa.ideas.module.common.AppAnnotations;
 import es.us.isa.ideas.module.common.AppResponse;
 import es.us.isa.ideas.module.common.AppResponse.Status;
@@ -43,6 +43,7 @@ public class LanguageController extends BaseLanguageController {
 
     @RequestMapping(value = "/operation/{id}/execute", method = RequestMethod.POST)
     @ResponseBody
+    @Override
     public AppResponse executeOperation(String id, String content,
             String fileUri, String data) {
 
@@ -61,18 +62,18 @@ public class LanguageController extends BaseLanguageController {
                     op = webReasoner.explain(content);
                 }
 
-                if (solve) {
+                if (solve && op != null) {
                     appResponse
                             .setMessage("<pre><b>The document is consistent.</b>\n"
                                     + op.get("result") + "</pre>");
                     appResponse.setStatus(Status.OK);
-                } else if (op.getResult().get("conflicts") != null) {
+                } else if (op != null && op.getResult().get("conflicts") != null) {
                     appResponse
                             .setMessage("<pre><b>The document is not consistent.</b>\n"
                                     + op.getResult().get("conflicts")
                                     + "</pre>");
                     appResponse.setStatus(Status.OK_PROBLEMS);
-                } else {
+                } else if (op != null) {
                     appResponse
                             .setMessage("<pre><b>The document is not consistent.</b>\n"
                                     + op.get("result") + "</pre>");
@@ -92,10 +93,11 @@ public class LanguageController extends BaseLanguageController {
 
     @RequestMapping(value = "/format/{format}/checkLanguage", method = RequestMethod.POST)
     @ResponseBody
+    @Override
     public AppResponse checkLanguage(String id, String content, String fileUri) {
 
         AppResponse appResponse = new AppResponse();
-        List<AppAnnotations> annotations = new ArrayList<AppAnnotations>();
+        List<AppAnnotations> annotations = new ArrayList<>();
 
         String url = Config.getInstance().getCSPWebReasonerEndpoint();
         url += "/language/check";
@@ -106,7 +108,7 @@ public class LanguageController extends BaseLanguageController {
 
             Type listType = new TypeToken<ArrayList<AppAnnotations>>() {
             }.getType();
-            annotations = new Gson().fromJson(json.toString(), listType);
+            annotations = new Gson().fromJson(json, listType);
 
             appResponse.setAnnotations(annotations
                     .toArray(new AppAnnotations[0]));
@@ -114,7 +116,7 @@ public class LanguageController extends BaseLanguageController {
             appResponse.setStatus(Status.OK_PROBLEMS);
         }
 
-        if (annotations.size() == 0) {
+        if (annotations.isEmpty()) {
             appResponse.setStatus(Status.OK);
         } else {
             appResponse.setStatus(Status.OK_PROBLEMS);
@@ -125,6 +127,7 @@ public class LanguageController extends BaseLanguageController {
 
     @RequestMapping(value = "/convert", method = RequestMethod.POST)
     @ResponseBody
+    @Override
     public AppResponse convertFormat(String currentFormat,
             String desiredFormat, String fileUri, String content) {
 
