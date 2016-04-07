@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>es.us.isa.ideas.module</groupId>
-        <artifactId>ideas-cplex-module</artifactId>
-        <version>0.8</version>
+        <artifactId>ideas-module-opl</artifactId>
+        <version>0.8.1</version>
         <relativePath>./../../pom.xml</relativePath>
     </parent>
     <groupId>es.us.isa.ideas.module.cplex</groupId>
-    <artifactId>ideas-opl-language</artifactId>
+    <artifactId>ideas-language-opl</artifactId>
     <packaging>war</packaging>
 
-    <name>ideas-opl-language</name>
+    <name>ideas-language-opl</name>
 
     <!-- Properties -->
     <properties>
@@ -56,11 +56,6 @@
             <url>https://github.com/isa-group/ideas-base-module</url>
         </repository>
 
-        <repository>
-            <id>aml</id>
-            <url>https://github.com/isa-group/aml</url>
-        </repository>
-
     </repositories>
 
     <dependencies>
@@ -76,6 +71,7 @@
             <groupId>es.us.isa</groupId>
             <artifactId>aml</artifactId>
             <version>${aml.version}</version>
+            <type>jar</type>
         </dependency>
 
         <dependency>

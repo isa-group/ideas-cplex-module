@@ -1,3 +1,7 @@
+IDEAS OPL Module v0.8.1, 06/04/2015
+-----------------------
+- Updated OPL module with the latest CSPWebReasoner.
+
 IDEAS CPLEX Module v0.8, 26/01/2016
 -----------------------
 - Updated AML dependency (0.9.4)
